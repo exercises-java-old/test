@@ -1,7 +1,5 @@
 package se.lexicon.test.integration;
 
-import se.lexicon.market.component.service.MarketOrderComponentServiceProvider;
-import se.lexicon.order.component.service.OrderComponentServiceProvider;
 import com.so4it.api.test.common.ApiFrameworkCommonTest;
 import com.so4it.common.bean.MapBeanContext;
 import com.so4it.common.jmx.MBeanRegistry;
@@ -25,6 +23,8 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.junit.runners.Suite;
+import se.lexicon.market.component.service.MarketComponentServiceProvider;
+import se.lexicon.order.component.service.OrderComponentServiceProvider;
 
 /**
  * @author Magnus Poromaa {@literal <mailto:magnus.poromaa@so4it.com/>}
@@ -61,8 +61,8 @@ public class IntegrationTestSuite {
     @ClassRule
     public static final RuleChain SUITE_RULE_CHAIN = RuleChain
             .outerRule(getGigaSpacesRule())
-            .around(getImportRule())
             .around(getExportRule())
+            .around(getImportRule())
             .around(getConfigurationSourceRule())
             .around(getServiceBindingRule());
 
@@ -72,26 +72,24 @@ public class IntegrationTestSuite {
             COMPONENT_TEST_RULE.addXmlConfiguration("fault-tolerance-common.xml");
             COMPONENT_TEST_RULE.addXmlConfiguration("metric-springframework.xml");
 
+            //Add order component
             COMPONENT_TEST_RULE.addXmlConfiguration("order-component-dao.xml");
             COMPONENT_TEST_RULE.addXmlConfiguration("order-component-service.xml");
 
-
+            //Add market component
             COMPONENT_TEST_RULE.addXmlConfiguration("market-component-dao.xml");
             COMPONENT_TEST_RULE.addXmlConfiguration("market-component-service.xml");
 
-
+            //Add the API clients we are using in the components
             COMPONENT_TEST_RULE.addXmlConfiguration("market-api-client.xml");
             COMPONENT_TEST_RULE.addXmlConfiguration("order-api-client.xml");
-
-
+            COMPONENT_TEST_RULE.addXmlConfiguration("integration-test-api-import.xml");
 
             //Theses are just here to enable testing multiple components in a single spring context
             COMPONENT_TEST_RULE.addXmlConfiguration("integration-test-space.xml");
             COMPONENT_TEST_RULE.addXmlConfiguration("integration-test-service-export.xml");
 
-
-
-            //COMPONENT_TEST_RULE.addXmlConfiguration("market-api-test-import.xml");
+            //Add the framework stuff needed to stitch everything together
             COMPONENT_TEST_RULE.addBean(MBeanRegistry.DEFAULT_BEAN_NAME, MBeanRegistryFactory.getDefaultRegistry());
             COMPONENT_TEST_RULE.addBean(ApiRegistryClient.DEFAULT_API_BEAN_NAME, API_REGISTRY);
             COMPONENT_TEST_RULE.addBean(ServiceRegistryClient.DEFAULT_API_BEAN_NAME, SERVICE_REGISTRY);
@@ -147,7 +145,7 @@ public class IntegrationTestSuite {
     public static ServiceBindingRule getServiceBindingRule() {
         if (SERVICE_BINDING_RULE == null) {
             SERVICE_BINDING_RULE = new ServiceBindingRule(SERVICE_BEAN_STATE_REGISTRY);
-            SERVICE_BINDING_RULE.addServiceProvider(MarketOrderComponentServiceProvider.class);
+            SERVICE_BINDING_RULE.addServiceProvider(MarketComponentServiceProvider.class);
             SERVICE_BINDING_RULE.addServiceProvider(OrderComponentServiceProvider.class);
         }
         return SERVICE_BINDING_RULE;

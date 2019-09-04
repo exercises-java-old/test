@@ -22,7 +22,7 @@
         <constructor-arg name="imports">
             <list>
                 <value type="java.lang.Class">se.lexicon.order.component.service.OrderComponentServiceProvider</value>
-                <value type="java.lang.Class">se.lexicon.market.component.service.MarketOrderComponentServiceProvider</value>
+                <value type="java.lang.Class">se.lexicon.market.component.service.MarketComponentServiceProvider</value>
             </list>
         </constructor-arg>
         <constructor-arg name="serviceRegistryClient" ref="serviceRegistryApiClient"/>
