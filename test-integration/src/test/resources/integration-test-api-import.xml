@@ -4,10 +4,10 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="integrationApiFrameworkBootstrap" class="com.so4it.api.ApiFrameworkSpringBootstrap"
-          init-method="initialize" destroy-method="close">
+    <bean id="integrationApiFrameworkBootstrap" class="com.so4it.api.ApiFrameworkSpringBootstrap" init-method="initialize" destroy-method="close">
         <constructor-arg name="apiRegistryClient" ref="apiRegistryApiClient"/>
         <constructor-arg name="dynamicConfiguration" ref="dynamicConfiguration"/>
+        <constructor-arg name="beanContext" ref="frameworksBeanContext"/>
         <property name="imports">
             <list>
                 <value type="java.lang.Class">se.lexicon.order.api.client.OrderApiProvider</value>

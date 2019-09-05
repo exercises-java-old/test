@@ -39,6 +39,9 @@ public class OrderApiClientClientIntegrationTest {
 
     private static final BeanContext BEAN_CONTEXT = ApiFrameworkCommonTest.createClientBeanContext(IntegrationTestSuite.DYNAMIC_CONFIGURATION);
 
+
+
+
     @Rule
     public ApiFrameworkBootstrapTestRule apiFrameworkBootstrapTestRule = ApiFrameworkBootstrapTestRule.builder()
             .withBeanContext(BEAN_CONTEXT)
@@ -68,14 +71,11 @@ public class OrderApiClientClientIntegrationTest {
 
 
         Boolean ok = orderApiClient.placeOrder(OrderTestBuilder.builder().build());
-        /*
         Assert.assertTrue(ok);
-        */
 
 
     }
 
-    @Test
     public void testMakeDeal() throws Exception {
         OrderApiClient orderApiClient = BEAN_CONTEXT.getBean(OrderApiClient.class);
         Poller.pollAndCheck(SatisfiedWhenClientConnected.create(orderApiClient));

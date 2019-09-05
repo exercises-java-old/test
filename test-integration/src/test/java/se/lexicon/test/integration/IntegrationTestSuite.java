@@ -1,6 +1,7 @@
 package se.lexicon.test.integration;
 
 import com.so4it.api.test.common.ApiFrameworkCommonTest;
+import com.so4it.common.bean.BeanContext;
 import com.so4it.common.bean.MapBeanContext;
 import com.so4it.common.jmx.MBeanRegistry;
 import com.so4it.common.jmx.MBeanRegistryFactory;
@@ -58,6 +59,7 @@ public class IntegrationTestSuite {
 
     private static ServiceBindingRule SERVICE_BINDING_RULE;
 
+
     @ClassRule
     public static final RuleChain SUITE_RULE_CHAIN = RuleChain
             .outerRule(getGigaSpacesRule())
@@ -71,6 +73,7 @@ public class IntegrationTestSuite {
             COMPONENT_TEST_RULE = new SpringContextRule();
             COMPONENT_TEST_RULE.addXmlConfiguration("fault-tolerance-common.xml");
             COMPONENT_TEST_RULE.addXmlConfiguration("metric-springframework.xml");
+
 
             //Add order component
             COMPONENT_TEST_RULE.addXmlConfiguration("order-component-dao.xml");
@@ -89,12 +92,15 @@ public class IntegrationTestSuite {
             COMPONENT_TEST_RULE.addXmlConfiguration("integration-test-space.xml");
             COMPONENT_TEST_RULE.addXmlConfiguration("integration-test-service-export.xml");
 
+
+            BeanContext beanContext = new MapBeanContext();
+
             //Add the framework stuff needed to stitch everything together
             COMPONENT_TEST_RULE.addBean(MBeanRegistry.DEFAULT_BEAN_NAME, MBeanRegistryFactory.getDefaultRegistry());
             COMPONENT_TEST_RULE.addBean(ApiRegistryClient.DEFAULT_API_BEAN_NAME, API_REGISTRY);
             COMPONENT_TEST_RULE.addBean(ServiceRegistryClient.DEFAULT_API_BEAN_NAME, SERVICE_REGISTRY);
             COMPONENT_TEST_RULE.addBean(DynamicConfiguration.DEFAULT_BEAN_NAME, DYNAMIC_CONFIGURATION);
-            COMPONENT_TEST_RULE.addBean(MapBeanContext.DEFAULT_BEAN_NAME, new MapBeanContext());
+            COMPONENT_TEST_RULE.addBean(MapBeanContext.DEFAULT_BEAN_NAME, beanContext);
             COMPONENT_TEST_RULE.addBean(ServiceBeanStateRegistry.DEFAULT_BEAN_NAME, SERVICE_BEAN_STATE_REGISTRY);
         }
         return COMPONENT_TEST_RULE;
